@@ -9,7 +9,7 @@ router.post('/', celebrate({
     keyword: Joi.string().min(2).max(30),
     title: Joi.string(),
     text: Joi.string(),
-    date: Joi.String().date(),
+    date: Joi.string(),
     source: Joi.string(),
     link: Joi.string().uri(),
     image: Joi.string().uri(),
@@ -18,7 +18,7 @@ router.post('/', celebrate({
 
 router.delete('/:articleId', celebrate({
   params: Joi.object().keys({
-    _id: Joi.string().alphanum().length(24),
+    articleId: Joi.string().alphanum().length(24),
   }),
 }), deleteArticle);
 

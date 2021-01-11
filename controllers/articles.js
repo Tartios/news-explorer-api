@@ -15,7 +15,7 @@ module.exports.getArticles = (req, res, next) => {
 };
 
 module.exports.saveArticle = (req, res, next) => {
-  articleModel.create()
+  articleModel.create({ ...req.body })
     .then((data) => {
       if (!data) {
         throw new ValidationError('Данные переданные пользователем некорректны');
@@ -27,7 +27,7 @@ module.exports.saveArticle = (req, res, next) => {
 };
 
 module.exports.deleteArticle = (req, res, next) => {
-  const { _id } = req.params;
+  const _id = req.params.articleId;
   articleModel.findByIdAndRemove(_id)
     .then((userCard) => {
       res.send({ data: userCard });
