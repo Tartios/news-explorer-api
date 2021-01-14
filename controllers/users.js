@@ -16,6 +16,8 @@ module.exports.getUser = (req, res, next) => {
         next(new ValidationError('данные переданные пользователем некорректны'));
       } else if (err.statusCode === 404) {
         next(err);
+      } else {
+        next(err);
       }
     });
 };

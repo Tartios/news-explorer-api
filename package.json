@@ -21,10 +21,8 @@
     "eslint": "^7.17.0",
     "eslint-config-airbnb-base": "^14.2.1",
     "eslint-plugin-import": "^2.22.1",
-    "node-hot-loader": "^1.21.0",
     "nodemon": "^2.0.6",
-    "webpack": "^5.11.1",
-    "webpack-dev-server": "^3.11.1"
+    "webpack": "^5.11.1"
   },
   "dependencies": {
     "bcrypt": "^5.0.0",
