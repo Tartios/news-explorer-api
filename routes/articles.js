@@ -6,19 +6,19 @@ router.get('/', getArticles);
 
 router.post('/', celebrate({
   body: Joi.object().keys({
-    keyword: Joi.string().min(2).max(30),
+    keyword: Joi.string(),
     title: Joi.string(),
     text: Joi.string(),
     date: Joi.string(),
     source: Joi.string(),
-    link: Joi.string().uri(),
-    image: Joi.string().uri(),
+    link: Joi.string().pattern(/(http|https):\/\/(www)?[a-z0-9-._~:/?#[\]@!$&'()*+,;=]{1,}#?/),
+    image: Joi.string().pattern(/(http|https):\/\/(www)?[a-z0-9-._~:/?#[\]@!$&'()*+,;=]{1,}#?/),
   }),
 }), saveArticle);
 
 router.delete('/:articleId', celebrate({
   params: Joi.object().keys({
-    articleId: Joi.string().alphanum().length(24),
+    articleId: Joi.string().hex().length(24),
   }),
 }), deleteArticle);
 

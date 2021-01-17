@@ -1,9 +1,11 @@
 const articleModel = require('../models/article');
 const { NotFoundError } = require('../errors/not-found-error.js');
 const { ValidationError } = require('../errors/validationerror.js');
+const { Forbiden } = require('../errors/forbiden.js');
 
 module.exports.getArticles = (req, res, next) => {
-  articleModel.find()
+  const owner = req.user._id;
+  articleModel.find({ owner })
     .then((data) => {
       if (!data) {
         throw new NotFoundError('Запрашиваемый ресурс не найден');
@@ -15,7 +17,8 @@ module.exports.getArticles = (req, res, next) => {
 };
 
 module.exports.saveArticle = (req, res, next) => {
-  articleModel.create({ ...req.body })
+  const owner = req.user._id;
+  articleModel.create({ owner, ...req.body })
     .then((data) => {
       if (!data) {
         throw new ValidationError('Данные переданные пользователем некорректны');
@@ -28,15 +31,24 @@ module.exports.saveArticle = (req, res, next) => {
 
 module.exports.deleteArticle = (req, res, next) => {
   const _id = req.params.articleId;
-  articleModel.findByIdAndRemove(_id)
-    .then((userCard) => {
-      res.send({ data: userCard });
-    })
-    .catch((err) => {
-      if (err.kind === 'ObjectId') {
-        next(new NotFoundError('Эта статья не обнаружена'));
-      } else {
-        next(err);
+  const owner = req.user._id;
+  articleModel.findById(_id)
+    .then((article) => {
+      if (!article) {
+        throw new NotFoundError('Нет такой');
       }
-    });
+      articleModel.find({ owner, _id })
+        .then((articleOwner) => {
+          if (!articleOwner[0]) {
+            throw new Forbiden('Ты не владелец');
+          }
+          articleModel.findByIdAndRemove(_id)
+            .then((trueArticle) => {
+              res.send(trueArticle);
+            })
+            .catch(next);
+        })
+        .catch(next);
+    })
+    .catch(next);
 };
