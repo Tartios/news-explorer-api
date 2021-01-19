@@ -1,16 +1,11 @@
 const articleModel = require('../models/article');
 const { NotFoundError } = require('../errors/not-found-error.js');
-const { ValidationError } = require('../errors/validationerror.js');
 const { Forbiden } = require('../errors/forbiden.js');
 
 module.exports.getArticles = (req, res, next) => {
   const owner = req.user._id;
   articleModel.find({ owner })
     .then((data) => {
-      if (!data) {
-        throw new NotFoundError('Запрашиваемый ресурс не найден');
-      }
-
       res.send(data);
     })
     .catch((next));
@@ -20,11 +15,12 @@ module.exports.saveArticle = (req, res, next) => {
   const owner = req.user._id;
   articleModel.create({ owner, ...req.body })
     .then((data) => {
-      if (!data) {
-        throw new ValidationError('Данные переданные пользователем некорректны');
-      }
-
-      res.send(data);
+      const {
+        keyword, title, text, date, source, link, image,
+      } = data;
+      res.send({
+        keyword, title, text, date, source, link, image,
+      });
     })
     .catch(next);
 };

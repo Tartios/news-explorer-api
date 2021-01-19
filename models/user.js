@@ -26,8 +26,7 @@ const userSchema = new mongoose.Schema({
   },
 });
 
-// eslint-disable-next-line func-names
-userSchema.statics.findUserByCredentials = function (email, password) {
+userSchema.statics.findUserByCredentials = function findUserByCredentials(email, password) {
   if (!email || !password) {
     throw new ValidationError('Введенные данные некорректны');
   }
