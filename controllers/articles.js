@@ -15,12 +15,10 @@ module.exports.saveArticle = (req, res, next) => {
   const owner = req.user._id;
   articleModel.create({ owner, ...req.body })
     .then((data) => {
-      const {
-        keyword, title, text, date, source, link, image,
-      } = data;
-      res.send({
-        keyword, title, text, date, source, link, image,
-      });
+      // const {
+      //   keyword, title, text, date, source, link, image,
+      // } = data;
+      res.send(data);
     })
     .catch(next);
 };
